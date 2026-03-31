@@ -4,11 +4,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/lib/auth';
 import { useQuery } from '@tanstack/react-query';
 import { AppLayout } from '@/components/AppLayout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { generateQueries } from '@/lib/scan-utils';
 
@@ -39,7 +34,6 @@ export default function NewScan() {
     setLoading(true);
 
     try {
-      // Check/reset monthly period
       const periodStart = new Date(profile.current_period_start);
       const now = new Date();
       const daysDiff = (now.getTime() - periodStart.getTime()) / (1000 * 60 * 60 * 24);
@@ -53,14 +47,12 @@ export default function NewScan() {
         }).eq('id', user.id);
       }
 
-      // Check limits
       if (profile.plan !== 'pro' && scansThisMonth >= 2) {
         toast({ title: 'Scan limit reached', description: 'Upgrade to Pro for unlimited scans.', variant: 'destructive' });
         setLoading(false);
         return;
       }
 
-      // Create startup
       const { data: startup, error: startupError } = await supabase
         .from('startups')
         .insert({ user_id: user.id, name, website, description })
@@ -68,7 +60,6 @@ export default function NewScan() {
         .single();
       if (startupError) throw startupError;
 
-      // Create scan
       const isPro = profile.plan === 'pro';
       const queries = generateQueries(description, isPro);
       const { data: scan, error: scanError } = await supabase
@@ -83,7 +74,6 @@ export default function NewScan() {
         .single();
       if (scanError) throw scanError;
 
-      // Create scan_results for each query × platform
       const results = queries.flatMap(query =>
         PLATFORMS.map(platform => ({
           scan_id: scan.id,
@@ -95,7 +85,6 @@ export default function NewScan() {
       const { error: resultsError } = await supabase.from('scan_results').insert(results);
       if (resultsError) throw resultsError;
 
-      // Increment scans_this_month
       await supabase.from('profiles').update({
         scans_this_month: scansThisMonth + 1,
       }).eq('id', user.id);
@@ -111,38 +100,53 @@ export default function NewScan() {
   return (
     <AppLayout>
       <div className="max-w-xl mx-auto">
-        <Card>
-          <CardHeader>
-            <CardTitle>Start a New Scan</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="paper-card">
+          <div className="p-5 border-b-2 border-foreground/10">
+            <h2 className="font-mono-display font-bold text-lg uppercase tracking-wider">Start a New Scan</h2>
+          </div>
+          <div className="p-5">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="name">Startup Name</Label>
-                <Input id="name" value={name} onChange={e => setName(e.target.value)} required placeholder="e.g. Poolabs" />
+                <label htmlFor="name" className="font-mono-display text-xs uppercase tracking-wider font-semibold">Startup Name</label>
+                <input
+                  id="name"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  required
+                  placeholder="e.g. Poolabs"
+                  className="paper-input w-full"
+                />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="website">Website URL</Label>
-                <Input id="website" type="url" value={website} onChange={e => setWebsite(e.target.value)} required placeholder="https://poolabs.com" />
+                <label htmlFor="website" className="font-mono-display text-xs uppercase tracking-wider font-semibold">Website URL</label>
+                <input
+                  id="website"
+                  type="url"
+                  value={website}
+                  onChange={e => setWebsite(e.target.value)}
+                  required
+                  placeholder="https://poolabs.com"
+                  className="paper-input w-full"
+                />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="desc">What does your startup do?</Label>
-                <Textarea
+                <label htmlFor="desc" className="font-mono-display text-xs uppercase tracking-wider font-semibold">What does your startup do?</label>
+                <textarea
                   id="desc"
                   value={description}
                   onChange={e => setDescription(e.target.value.slice(0, 200))}
                   required
                   placeholder="Describe your product in a sentence..."
-                  className="min-h-[100px]"
+                  className="paper-input w-full min-h-[100px] resize-none"
                 />
-                <p className="text-xs text-muted-foreground text-right">{description.length}/200</p>
+                <p className="text-xs font-mono-display text-muted-foreground text-right">{description.length}/200</p>
               </div>
-              <Button type="submit" className="w-full gradient-hero border-0" disabled={loading}>
-                {loading ? 'Generating...' : 'Generate Queries'}
-              </Button>
+              <button type="submit" className="paper-btn-primary w-full text-xs py-3" disabled={loading}>
+                {loading ? 'Generating...' : 'Generate Queries →'}
+              </button>
             </form>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </AppLayout>
   );

@@ -4,11 +4,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/lib/auth';
 import { AppLayout } from '@/components/AppLayout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { Check, Crown } from 'lucide-react';
 
@@ -51,61 +46,61 @@ export default function SettingsPage() {
   return (
     <AppLayout>
       <div className="max-w-xl mx-auto space-y-6">
-        <h1 className="text-2xl font-bold">Settings</h1>
+        <h1 className="text-2xl font-extrabold font-mono-display uppercase">Settings</h1>
 
         {/* Account Info */}
-        <Card>
-          <CardHeader><CardTitle className="text-base">Account Info</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
+        <div className="paper-card">
+          <div className="p-5 border-b-2 border-foreground/10">
+            <h3 className="font-mono-display font-bold text-sm uppercase tracking-wider">Account Info</h3>
+          </div>
+          <div className="p-5 space-y-4">
             <div className="space-y-2">
-              <Label>Email</Label>
-              <Input value={user?.email || ''} disabled />
+              <label className="font-mono-display text-xs uppercase tracking-wider font-semibold">Email</label>
+              <input value={user?.email || ''} disabled className="paper-input w-full opacity-50" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
-              <Input id="fullName" value={fullName} onChange={e => setFullName(e.target.value)} />
+              <label htmlFor="fullName" className="font-mono-display text-xs uppercase tracking-wider font-semibold">Full Name</label>
+              <input id="fullName" value={fullName} onChange={e => setFullName(e.target.value)} className="paper-input w-full" />
             </div>
-            <Button onClick={handleSave} disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</Button>
-          </CardContent>
-        </Card>
+            <button onClick={handleSave} disabled={saving} className="paper-btn-primary text-xs py-2.5 px-5">
+              {saving ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
+        </div>
 
         {/* Plan */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base">Plan</CardTitle>
-              <Badge variant="secondary">{profile?.plan === 'pro' ? 'Pro' : 'Free'}</Badge>
-            </div>
-          </CardHeader>
-          <CardContent>
+        <div className="paper-card">
+          <div className="p-5 border-b-2 border-foreground/10 flex items-center justify-between">
+            <h3 className="font-mono-display font-bold text-sm uppercase tracking-wider">Plan</h3>
+            <span className="paper-badge text-[10px] py-0.5 px-2">{profile?.plan === 'pro' ? 'Pro' : 'Free'}</span>
+          </div>
+          <div className="p-5">
             {profile?.plan !== 'pro' && (
-              <div className="rounded-lg border-2 border-primary p-4 space-y-3">
+              <div className="border-2 border-primary rounded-sm p-4 space-y-3">
                 <div className="flex items-center gap-2">
                   <Crown className="h-5 w-5 text-primary" />
-                  <span className="font-semibold">Upgrade to Pro — $29/mo</span>
+                  <span className="font-mono-display font-bold uppercase text-sm">Upgrade to Pro — $29/mo</span>
                 </div>
-                {['Unlimited scans', '25 queries per scan', 'Competitor analysis', 'Improvement suggestions', 'Shareable reports'].map(f => (
+                {['Unlimited scans', '25 queries per scan', 'Full diagnosis & actions', 'Progress tracking', 'Shareable reports'].map(f => (
                   <div key={f} className="flex items-center gap-2 text-sm">
                     <Check className="h-4 w-4 text-primary" /> {f}
                   </div>
                 ))}
-                <Button
-                  className="w-full gradient-hero border-0"
+                <button
+                  className="paper-btn-primary w-full text-xs py-3"
                   onClick={() => toast({ title: 'Coming Soon', description: 'Payment integration is coming soon.' })}
                 >
                   Upgrade
-                </Button>
+                </button>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Sign Out */}
-        <Card>
-          <CardContent className="py-4">
-            <Button variant="outline" onClick={handleSignOut}>Sign Out</Button>
-          </CardContent>
-        </Card>
+        <div className="paper-card p-5">
+          <button onClick={handleSignOut} className="paper-btn-outline text-xs py-2.5 px-5">Sign Out</button>
+        </div>
       </div>
     </AppLayout>
   );
