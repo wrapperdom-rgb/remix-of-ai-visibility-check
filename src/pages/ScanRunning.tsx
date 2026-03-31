@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/lib/auth';
 import { AppLayout } from '@/components/AppLayout';
-import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { simulateVisibility, generateSuggestions, generateShareToken, extractKeywords } from '@/lib/scan-utils';
 import { Check, Loader2 } from 'lucide-react';
@@ -81,7 +80,6 @@ export default function ScanRunning() {
         setCurrentQuery(query);
         setProgress(Math.round(((i + 1) / totalSteps) * 100));
 
-        // Process all platforms for this query
         for (const platform of PLATFORMS) {
           const sim = simulateVisibility(startup.name, query, platform, startup.description);
 
@@ -101,8 +99,6 @@ export default function ScanRunning() {
         }
 
         setProcessedQueries(prev => [...prev, query]);
-
-        // Simulate delay
         await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 400));
       }
 
@@ -110,7 +106,6 @@ export default function ScanRunning() {
       const visibilityScore = totalResults > 0 ? Math.round((visibleCount / totalResults) * 100) : 0;
       const shareToken = generateShareToken();
 
-      // Update scan
       await supabase.from('scans').update({
         status: 'completed',
         visibility_score: visibilityScore,
@@ -120,8 +115,6 @@ export default function ScanRunning() {
         share_token: shareToken,
       }).eq('id', scanId!);
 
-      // Generate suggestions
-      // Get all competitors
       const { data: allResults } = await supabase
         .from('scan_results')
         .select('competitors_found')
@@ -143,8 +136,6 @@ export default function ScanRunning() {
       }));
 
       await supabase.from('suggestions').insert(suggestionRows);
-
-      // Navigate to results
       setTimeout(() => navigate(`/scan/${scanId}/results`), 500);
     };
 
@@ -154,29 +145,27 @@ export default function ScanRunning() {
   return (
     <AppLayout>
       <div className="max-w-xl mx-auto">
-        <Card>
-          <CardContent className="py-12 text-center space-y-6">
-            <div className="h-16 w-16 mx-auto rounded-full gradient-hero flex items-center justify-center animate-pulse-scan">
-              <Loader2 className="h-8 w-8 text-primary-foreground animate-spin" />
-            </div>
-            <h2 className="text-xl font-bold">Scanning AI Platforms...</h2>
-            <Progress value={progress} className="h-2" />
-            <p className="text-sm text-muted-foreground">{progress}% complete</p>
+        <div className="paper-card p-8 text-center space-y-6">
+          <div className="h-16 w-16 mx-auto flex items-center justify-center bg-primary text-primary-foreground border-2 border-foreground/90 rounded-sm animate-pulse">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+          <h2 className="text-xl font-extrabold font-mono-display uppercase">Scanning AI Platforms...</h2>
+          <Progress value={progress} className="h-2" />
+          <p className="text-xs font-mono-display text-muted-foreground uppercase tracking-wider">{progress}% complete</p>
 
-            {currentQuery && (
-              <p className="text-sm font-medium truncate px-4">Checking: "{currentQuery}"</p>
-            )}
+          {currentQuery && (
+            <p className="text-sm font-medium truncate px-4 font-mono-display">Checking: "{currentQuery}"</p>
+          )}
 
-            <div className="max-h-48 overflow-y-auto space-y-1 text-left px-4">
-              {processedQueries.map((q, i) => (
-                <div key={i} className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <Check className="h-3 w-3 text-primary flex-shrink-0" />
-                  <span className="truncate">{q}</span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+          <div className="max-h-48 overflow-y-auto space-y-1 text-left px-4">
+            {processedQueries.map((q, i) => (
+              <div key={i} className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Check className="h-3 w-3 text-primary flex-shrink-0" />
+                <span className="truncate">{q}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </AppLayout>
   );

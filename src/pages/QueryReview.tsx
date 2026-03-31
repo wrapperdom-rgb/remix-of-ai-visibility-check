@@ -4,9 +4,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/lib/auth';
 import { AppLayout } from '@/components/AppLayout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Pencil, Trash2, Plus, Check, X } from 'lucide-react';
 
@@ -46,7 +43,6 @@ export default function QueryReview() {
     enabled: !!scanId,
   });
 
-  // Get unique queries
   const uniqueQueries = results
     ? [...new Set(results.map(r => r.query_text))]
     : [];
@@ -101,14 +97,12 @@ export default function QueryReview() {
   return (
     <AppLayout>
       <div className="max-w-2xl mx-auto">
-        <Card>
-          <CardHeader>
-            <CardTitle>Review Your Queries</CardTitle>
-            <p className="text-sm text-muted-foreground">
-              Edit, remove, or add queries before running the scan.
-            </p>
-          </CardHeader>
-          <CardContent className="space-y-2">
+        <div className="paper-card">
+          <div className="p-5 border-b-2 border-foreground/10">
+            <h2 className="font-mono-display font-bold text-lg uppercase tracking-wider">Review Your Queries</h2>
+            <p className="text-xs text-muted-foreground mt-1">Edit, remove, or add queries before running the scan.</p>
+          </div>
+          <div className="p-5 space-y-2">
             {isLoading ? (
               <div className="flex justify-center py-8">
                 <div className="h-6 w-6 animate-spin rounded-full border-4 border-primary border-t-transparent" />
@@ -116,71 +110,71 @@ export default function QueryReview() {
             ) : (
               <>
                 {uniqueQueries.map((query, idx) => (
-                  <div key={idx} className="flex items-center gap-2 rounded-lg bg-secondary/50 px-3 py-2">
+                  <div key={idx} className="flex items-center gap-2 border-2 border-foreground/10 rounded-sm px-3 py-2">
                     {editingIdx === idx ? (
                       <>
-                        <Input
+                        <input
                           value={editValue}
                           onChange={e => setEditValue(e.target.value)}
-                          className="flex-1"
+                          className="paper-input flex-1"
                           autoFocus
                         />
-                        <Button size="icon" variant="ghost" onClick={() => handleEdit(query)}>
+                        <button onClick={() => handleEdit(query)} className="p-1.5 hover:bg-secondary rounded-sm">
                           <Check className="h-4 w-4" />
-                        </Button>
-                        <Button size="icon" variant="ghost" onClick={() => setEditingIdx(null)}>
+                        </button>
+                        <button onClick={() => setEditingIdx(null)} className="p-1.5 hover:bg-secondary rounded-sm">
                           <X className="h-4 w-4" />
-                        </Button>
+                        </button>
                       </>
                     ) : (
                       <>
                         <span className="flex-1 text-sm">{query}</span>
-                        <Button size="icon" variant="ghost" onClick={() => { setEditingIdx(idx); setEditValue(query); }}>
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button size="icon" variant="ghost" onClick={() => handleDelete(query)}>
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        <button onClick={() => { setEditingIdx(idx); setEditValue(query); }} className="p-1.5 hover:bg-secondary rounded-sm">
+                          <Pencil className="h-3.5 w-3.5" />
+                        </button>
+                        <button onClick={() => handleDelete(query)} className="p-1.5 hover:bg-secondary rounded-sm">
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
                       </>
                     )}
                   </div>
                 ))}
 
                 {addingQuery ? (
-                  <div className="flex items-center gap-2 rounded-lg bg-secondary/50 px-3 py-2">
-                    <Input
+                  <div className="flex items-center gap-2 border-2 border-foreground/10 rounded-sm px-3 py-2">
+                    <input
                       value={newQuery}
                       onChange={e => setNewQuery(e.target.value)}
                       placeholder="Enter a query..."
-                      className="flex-1"
+                      className="paper-input flex-1"
                       autoFocus
                     />
-                    <Button size="icon" variant="ghost" onClick={handleAdd}>
+                    <button onClick={handleAdd} className="p-1.5 hover:bg-secondary rounded-sm">
                       <Check className="h-4 w-4" />
-                    </Button>
-                    <Button size="icon" variant="ghost" onClick={() => setAddingQuery(false)}>
+                    </button>
+                    <button onClick={() => setAddingQuery(false)} className="p-1.5 hover:bg-secondary rounded-sm">
                       <X className="h-4 w-4" />
-                    </Button>
+                    </button>
                   </div>
                 ) : uniqueQueries.length < queryLimit ? (
-                  <Button variant="outline" size="sm" className="gap-2" onClick={() => setAddingQuery(true)}>
-                    <Plus className="h-4 w-4" /> Add Query
-                  </Button>
+                  <button onClick={() => setAddingQuery(true)} className="paper-btn-outline text-xs py-2 px-3 flex items-center gap-1.5">
+                    <Plus className="h-3.5 w-3.5" /> Add Query
+                  </button>
                 ) : null}
               </>
             )}
 
             <div className="pt-4">
-              <Button
-                className="w-full gradient-hero border-0"
+              <button
+                className="paper-btn-primary w-full text-xs py-3"
                 onClick={() => navigate(`/scan/${scanId}/running`)}
                 disabled={uniqueQueries.length === 0}
               >
-                Run Scan ({uniqueQueries.length} queries × 4 platforms)
-              </Button>
+                Run Scan ({uniqueQueries.length} queries × 4 platforms) →
+              </button>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </AppLayout>
   );
