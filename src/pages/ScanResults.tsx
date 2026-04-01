@@ -437,7 +437,7 @@ export default function ScanResults() {
                   </div>
                 </div>
               );
-            })}
+            }))}
           </div>
         )}
       </div>
