@@ -1,4 +1,11 @@
-const PLATFORMS = ['chatgpt', 'perplexity', 'claude', 'gemini'] as const;
+const PLATFORMS = [
+  'chatgpt', 'perplexity', 'claude', 'gemini', 'copilot', 'meta_ai',
+  'mistral', 'grok', 'you_com', 'phind', 'poe', 'pi', 'deepseek',
+  'qwen', 'llama', 'reka', 'command_r', 'duckduckgo_ai', 'brave_leo',
+  'notion_ai', 'slack_ai', 'canva_ai', 'jasper', 'writesonic', 'microsoft_designer'
+] as const;
+
+export { PLATFORMS };
 
 function hashCode(str: string): number {
   let hash = 0;

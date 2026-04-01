@@ -8,7 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { simulateVisibility, generateSuggestions, generateShareToken, extractKeywords } from '@/lib/scan-utils';
 import { Check, Loader2 } from 'lucide-react';
 
-const PLATFORMS = ['chatgpt', 'perplexity', 'claude', 'gemini'];
+import { PLATFORMS } from '@/lib/scan-utils';
 
 export default function ScanRunning() {
   const { scanId } = useParams();

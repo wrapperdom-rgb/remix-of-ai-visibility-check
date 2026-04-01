@@ -11,10 +11,13 @@ import { ArrowLeft, Check, X, Copy, Share2, Lock, ChevronDown, ChevronUp, AlertT
 import { useState } from 'react';
 
 const PLATFORM_LABELS: Record<string, string> = {
-  chatgpt: 'ChatGPT',
-  perplexity: 'Perplexity',
-  claude: 'Claude',
-  gemini: 'Gemini',
+  chatgpt: 'ChatGPT', perplexity: 'Perplexity', claude: 'Claude', gemini: 'Gemini',
+  copilot: 'Copilot', meta_ai: 'Meta AI', mistral: 'Mistral', grok: 'Grok',
+  you_com: 'You.com', phind: 'Phind', poe: 'Poe', pi: 'Pi', deepseek: 'DeepSeek',
+  qwen: 'Qwen', llama: 'Llama', reka: 'Reka', command_r: 'Command R',
+  duckduckgo_ai: 'DuckDuckGo AI', brave_leo: 'Brave Leo', notion_ai: 'Notion AI',
+  slack_ai: 'Slack AI', canva_ai: 'Canva AI', jasper: 'Jasper',
+  writesonic: 'Writesonic', microsoft_designer: 'Microsoft Designer',
 };
 
 const STATUS_ICONS: Record<string, { icon: string; color: string }> = {

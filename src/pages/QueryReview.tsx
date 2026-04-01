@@ -7,7 +7,7 @@ import { AppLayout } from '@/components/AppLayout';
 import { useToast } from '@/hooks/use-toast';
 import { Pencil, Trash2, Plus, Check, X } from 'lucide-react';
 
-const PLATFORMS = ['chatgpt', 'perplexity', 'claude', 'gemini'];
+import { PLATFORMS } from '@/lib/scan-utils';
 
 export default function QueryReview() {
   const { scanId } = useParams();

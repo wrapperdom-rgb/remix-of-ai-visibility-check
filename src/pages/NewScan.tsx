@@ -7,7 +7,7 @@ import { AppLayout } from '@/components/AppLayout';
 import { useToast } from '@/hooks/use-toast';
 import { generateQueries } from '@/lib/scan-utils';
 
-const PLATFORMS = ['chatgpt', 'perplexity', 'claude', 'gemini'];
+import { PLATFORMS } from '@/lib/scan-utils';
 
 export default function NewScan() {
   const { user } = useAuth();
