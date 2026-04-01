@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/lib/auth';
-import { ArrowRight, Check, Zap, Search, BarChart3, Target, TrendingUp, FileText } from 'lucide-react';
+import { ArrowRight, Check, Zap, Search, BarChart3, FileText } from 'lucide-react';
 
 export default function Homepage() {
   const { user } = useAuth();
@@ -8,7 +8,7 @@ export default function Homepage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navbar */}
-      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b-2 border-foreground/15 bg-background/95 backdrop-blur">
         <div className="container flex h-16 items-center justify-between">
           <Link to="/" className="text-xl font-extrabold text-primary tracking-tight">
             Poolabs
@@ -16,9 +16,7 @@ export default function Homepage() {
           <div className="flex items-center gap-3">
             {user ? (
               <Link to="/dashboard">
-                <button className="px-5 py-2 text-sm font-semibold rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition">
-                  Dashboard
-                </button>
+                <button className="paper-btn-primary text-xs py-2 px-5">Dashboard</button>
               </Link>
             ) : (
               <>
@@ -26,9 +24,7 @@ export default function Homepage() {
                   Sign In
                 </Link>
                 <Link to="/sign-up">
-                  <button className="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-foreground text-foreground hover:bg-foreground hover:text-background transition">
-                    Get Started
-                  </button>
+                  <button className="paper-btn text-xs py-2 px-5">Get Started</button>
                 </Link>
               </>
             )}
@@ -49,8 +45,8 @@ export default function Homepage() {
           Find out if ChatGPT, Perplexity, Claude, and Gemini mention your startup when people ask about solutions you provide.
         </p>
         <Link to={user ? '/scan/new' : '/sign-up'}>
-          <button className="px-8 py-4 text-base font-semibold rounded-xl bg-gradient-to-r from-primary to-[hsl(190,80%,50%)] text-primary-foreground shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all">
-            Check Your Startup Now <ArrowRight className="h-5 w-5 inline ml-2" />
+          <button className="paper-btn-primary text-sm py-4 px-8 inline-flex items-center gap-2">
+            Check Your Startup Now <ArrowRight className="h-4 w-4" />
           </button>
         </Link>
       </section>
@@ -58,16 +54,16 @@ export default function Homepage() {
       {/* How it Works */}
       <section className="container py-20 max-w-5xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-14 tracking-tight">How It Works</h2>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-6">
           {[
             { icon: Search, title: 'Enter Your Startup', desc: 'Tell us your startup name, website, and what you do.', step: '01' },
             { icon: BarChart3, title: 'AI Scans & Diagnoses', desc: "We check 4 AI platforms and identify why you're missing.", step: '02' },
             { icon: FileText, title: 'Get Action Plan', desc: 'Receive blog ideas, keywords, and specific steps to improve.', step: '03' },
           ].map((step) => (
-            <div key={step.step} className="bg-card rounded-2xl border border-border p-6 hover:shadow-lg transition-shadow">
+            <div key={step.step} className="paper-card paper-card-hover p-6">
               <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Step {step.step}</span>
               <div className="flex items-center gap-3 mt-4 mb-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-primary text-primary-foreground border-2 border-foreground/20">
                   <step.icon className="h-5 w-5" />
                 </div>
                 <h3 className="font-bold text-lg">{step.title}</h3>
@@ -90,15 +86,15 @@ export default function Homepage() {
             { title: 'Platform Strategy', desc: 'Recommendations on where to publish and how to build authority.', pro: true },
             { title: 'Progress Tracking', desc: 'Track your improvement over time with re-scans and score history.' },
           ].map((item, i) => (
-            <div key={i} className="flex items-start gap-4 bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground shrink-0 mt-0.5">
+            <div key={i} className="paper-card paper-card-hover flex items-start gap-4 p-5">
+              <div className="flex h-7 w-7 items-center justify-center rounded-sm bg-primary text-primary-foreground shrink-0 mt-0.5">
                 <Check className="h-4 w-4" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="font-bold text-sm">{item.title}</h3>
                   {item.pro && (
-                    <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary/10 text-primary">Pro</span>
+                    <span className="paper-badge text-[10px] py-0.5 px-2 bg-primary/10 text-primary border-primary/30">Pro</span>
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed mt-1">{item.desc}</p>
@@ -113,7 +109,7 @@ export default function Homepage() {
         <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-14 tracking-tight">Pricing</h2>
         <div className="grid md:grid-cols-2 gap-6">
           {/* Free */}
-          <div className="bg-card rounded-2xl border border-border p-8">
+          <div className="paper-card p-8">
             <h3 className="font-bold text-lg mb-1">Free</h3>
             <p className="text-4xl font-extrabold mb-6">$0<span className="text-sm font-normal text-muted-foreground">/month</span></p>
             <div className="space-y-3 mb-8">
@@ -124,15 +120,13 @@ export default function Homepage() {
               ))}
             </div>
             <Link to="/sign-up" className="block">
-              <button className="w-full py-3 text-sm font-semibold rounded-xl border-2 border-foreground text-foreground hover:bg-foreground hover:text-background transition">
-                Get Started Free
-              </button>
+              <button className="paper-btn-outline w-full text-xs py-3">Get Started Free</button>
             </Link>
           </div>
 
           {/* Pro */}
-          <div className="bg-primary rounded-2xl p-8 text-primary-foreground relative overflow-hidden">
-            <div className="absolute top-4 right-4 bg-background/20 text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">
+          <div className="paper-card-blue paper-card-stacked p-8 relative">
+            <div className="absolute top-0 right-0 bg-foreground text-background text-[10px] font-semibold px-3 py-1 uppercase tracking-wider">
               Popular
             </div>
             <h3 className="font-bold text-lg mb-1">Pro</h3>
@@ -144,7 +138,7 @@ export default function Homepage() {
                 </div>
               ))}
             </div>
-            <button className="w-full py-3 text-sm font-semibold rounded-xl bg-background/20 text-primary-foreground opacity-70 cursor-not-allowed backdrop-blur-sm" disabled>
+            <button className="paper-btn w-full text-xs py-3 bg-foreground text-background border-foreground opacity-70 cursor-not-allowed" disabled>
               Coming Soon
             </button>
           </div>
@@ -152,7 +146,7 @@ export default function Homepage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-10">
+      <footer className="border-t-2 border-foreground/15 py-10">
         <div className="container text-center text-sm text-muted-foreground">
           © {new Date().getFullYear()} Poolabs. All rights reserved.
         </div>
