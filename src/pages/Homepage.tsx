@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/lib/auth';
-import { Button } from '@/components/ui/button';
 import { ArrowRight, Check, Zap, Search, BarChart3, Target, TrendingUp, FileText } from 'lucide-react';
 
 export default function Homepage() {
@@ -9,23 +8,27 @@ export default function Homepage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navbar */}
-      <header className="sticky top-0 z-50 border-b-2 border-foreground/90 bg-card">
-        <div className="container flex h-14 items-center justify-between">
-          <Link to="/" className="paper-badge bg-foreground text-background border-foreground">
-            <Zap className="h-3.5 w-3.5" /> Poolabs
+      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
+        <div className="container flex h-16 items-center justify-between">
+          <Link to="/" className="text-xl font-extrabold text-primary tracking-tight">
+            Poolabs
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {user ? (
               <Link to="/dashboard">
-                <button className="paper-btn text-xs py-2 px-4">Dashboard</button>
+                <button className="px-5 py-2 text-sm font-semibold rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition">
+                  Dashboard
+                </button>
               </Link>
             ) : (
               <>
-                <Link to="/sign-in">
-                  <button className="paper-btn-outline text-xs py-2 px-4">Sign In</button>
+                <Link to="/sign-in" className="text-sm font-medium text-foreground hover:text-primary transition">
+                  Sign In
                 </Link>
                 <Link to="/sign-up">
-                  <button className="paper-btn text-xs py-2 px-4">Get Started</button>
+                  <button className="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-foreground text-foreground hover:bg-foreground hover:text-background transition">
+                    Get Started
+                  </button>
                 </Link>
               </>
             )}
@@ -34,79 +37,40 @@ export default function Homepage() {
       </header>
 
       {/* Hero */}
-      <section className="container py-16 md:py-24">
-        <div className="grid md:grid-cols-2 gap-12 items-start">
-          {/* Left side - headline */}
-          <div>
-            <span className="paper-badge-primary mb-6 inline-flex">
-              <Zap className="h-3 w-3" /> AI-Powered
-            </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-6 font-mono-display uppercase">
-              Make Your Startup{' '}
-              <span className="text-primary">Visible in AI</span>
-            </h1>
-            <div className="paper-card p-4 mb-8 max-w-lg">
-              <p className="font-mono-display text-sm leading-relaxed">
-                Find out if ChatGPT, Perplexity, Claude, and Gemini mention your startup. Get actionable steps to improve your AI visibility.
-              </p>
-            </div>
-            <Link to={user ? '/scan/new' : '/sign-up'}>
-              <button className="paper-btn-primary text-sm py-4 px-8 flex items-center gap-2">
-                Start Now <ArrowRight className="h-4 w-4" />
-              </button>
-            </Link>
-          </div>
-
-          {/* Right side - stats card */}
-          <div className="paper-card-blue paper-card-stacked p-6 md:p-8">
-            <div className="space-y-6">
-              <div className="border-b border-primary-foreground/20 pb-5">
-                <div className="flex items-center gap-2 mb-1">
-                  <Search className="h-5 w-5" />
-                  <span className="text-3xl md:text-4xl font-extrabold font-mono-display">0-100</span>
-                </div>
-                <p className="font-mono-display text-xs uppercase tracking-widest opacity-80">Visibility Score</p>
-              </div>
-              <div className="border-b border-primary-foreground/20 pb-5">
-                <div className="flex items-center gap-2 mb-1">
-                  <Target className="h-5 w-5" />
-                  <span className="text-3xl md:text-4xl font-extrabold font-mono-display">AI</span>
-                </div>
-                <p className="font-mono-display text-xs uppercase tracking-widest opacity-80">Diagnosis & Actions</p>
-              </div>
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <TrendingUp className="h-5 w-5" />
-                  <span className="text-3xl md:text-4xl font-extrabold font-mono-display">100%</span>
-                </div>
-                <p className="font-mono-display text-xs uppercase tracking-widest opacity-80">Actionable</p>
-              </div>
-            </div>
-            <Link to={user ? '/scan/new' : '/sign-up'} className="block mt-6">
-              <button className="paper-btn text-xs py-3 px-6 w-full text-center bg-foreground text-background border-foreground">
-                Start Free <ArrowRight className="h-3.5 w-3.5 inline ml-1" />
-              </button>
-            </Link>
-          </div>
-        </div>
+      <section className="container py-24 md:py-36 text-center max-w-4xl mx-auto">
+        <p className="text-sm font-medium text-muted-foreground mb-6 tracking-wide">
+          AI Visibility Tracker for Startups
+        </p>
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] mb-8">
+          Is Your Startup{' '}
+          <span className="text-primary">Visible in AI Search?</span>
+        </h1>
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
+          Find out if ChatGPT, Perplexity, Claude, and Gemini mention your startup when people ask about solutions you provide.
+        </p>
+        <Link to={user ? '/scan/new' : '/sign-up'}>
+          <button className="px-8 py-4 text-base font-semibold rounded-xl bg-gradient-to-r from-primary to-[hsl(190,80%,50%)] text-primary-foreground shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all">
+            Check Your Startup Now <ArrowRight className="h-5 w-5 inline ml-2" />
+          </button>
+        </Link>
       </section>
 
       {/* How it Works */}
-      <section className="container py-16">
-        <h2 className="text-2xl md:text-3xl font-extrabold font-mono-display uppercase text-center mb-12">How It Works</h2>
-        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+      <section className="container py-20 max-w-5xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-14 tracking-tight">How It Works</h2>
+        <div className="grid md:grid-cols-3 gap-8">
           {[
             { icon: Search, title: 'Enter Your Startup', desc: 'Tell us your startup name, website, and what you do.', step: '01' },
-            { icon: BarChart3, title: 'AI Scans & Diagnoses', desc: 'We check 4 AI platforms and identify why you\'re missing.', step: '02' },
+            { icon: BarChart3, title: 'AI Scans & Diagnoses', desc: "We check 4 AI platforms and identify why you're missing.", step: '02' },
             { icon: FileText, title: 'Get Action Plan', desc: 'Receive blog ideas, keywords, and specific steps to improve.', step: '03' },
           ].map((step) => (
-            <div key={step.step} className="paper-card paper-card-hover p-6">
-              <span className="font-mono-display text-xs text-muted-foreground uppercase tracking-widest">Step {step.step}</span>
-              <div className="flex items-center gap-3 mt-3 mb-3">
-                <div className="flex h-10 w-10 items-center justify-center bg-primary text-primary-foreground border-2 border-foreground/90 rounded-sm">
+            <div key={step.step} className="bg-card rounded-2xl border border-border p-6 hover:shadow-lg transition-shadow">
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Step {step.step}</span>
+              <div className="flex items-center gap-3 mt-4 mb-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <step.icon className="h-5 w-5" />
                 </div>
-                <h3 className="font-bold text-base">{step.title}</h3>
+                <h3 className="font-bold text-lg">{step.title}</h3>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
             </div>
@@ -115,24 +79,29 @@ export default function Homepage() {
       </section>
 
       {/* What You Get */}
-      <section className="container py-16">
-        <h2 className="text-2xl md:text-3xl font-extrabold font-mono-display uppercase text-center mb-12">What You Get</h2>
-        <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+      <section className="container py-20 max-w-5xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-14 tracking-tight">What You Get</h2>
+        <div className="grid md:grid-cols-2 gap-5">
           {[
             { title: 'Visibility Score', desc: 'A clear 0-100 score showing how visible your startup is across AI platforms.' },
-            { title: 'Diagnosis Report', desc: 'Understand WHY you\'re not appearing — missing signals, weak content, low authority.' },
-            { title: 'Blog Post Ideas', desc: 'AI-generated blog topics designed to boost your visibility in AI answers.' },
-            { title: 'Keyword Targets', desc: 'Specific keywords and phrases to optimize for AI search results.' },
-            { title: 'Platform Strategy', desc: 'Recommendations on where to publish and how to build authority.' },
+            { title: 'Diagnosis Report', desc: "Understand WHY you're not appearing — missing signals, weak content, low authority." },
+            { title: 'Blog Post Ideas', desc: 'AI-generated blog topics designed to boost your visibility in AI answers.', pro: true },
+            { title: 'Keyword Targets', desc: 'Specific keywords and phrases to optimize for AI search results.', pro: true },
+            { title: 'Platform Strategy', desc: 'Recommendations on where to publish and how to build authority.', pro: true },
             { title: 'Progress Tracking', desc: 'Track your improvement over time with re-scans and score history.' },
           ].map((item, i) => (
-            <div key={i} className="flex items-start gap-3 paper-card p-4">
-              <div className="flex h-6 w-6 items-center justify-center bg-primary text-primary-foreground rounded-sm shrink-0 mt-0.5">
-                <Check className="h-3.5 w-3.5" />
+            <div key={i} className="flex items-start gap-4 bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground shrink-0 mt-0.5">
+                <Check className="h-4 w-4" />
               </div>
               <div>
-                <h3 className="font-bold text-sm mb-1">{item.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-bold text-sm">{item.title}</h3>
+                  {item.pro && (
+                    <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-primary/10 text-primary">Pro</span>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed mt-1">{item.desc}</p>
               </div>
             </div>
           ))}
@@ -140,40 +109,42 @@ export default function Homepage() {
       </section>
 
       {/* Pricing */}
-      <section className="container py-16">
-        <h2 className="text-2xl md:text-3xl font-extrabold font-mono-display uppercase text-center mb-12">Pricing</h2>
-        <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+      <section className="container py-20 max-w-4xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-14 tracking-tight">Pricing</h2>
+        <div className="grid md:grid-cols-2 gap-6">
           {/* Free */}
-          <div className="paper-card p-6">
-            <h3 className="font-mono-display font-bold text-lg uppercase mb-1">Free</h3>
-            <p className="text-3xl font-extrabold font-mono-display mb-4">$0<span className="text-sm font-normal text-muted-foreground">/month</span></p>
-            <div className="space-y-2 mb-6">
+          <div className="bg-card rounded-2xl border border-border p-8">
+            <h3 className="font-bold text-lg mb-1">Free</h3>
+            <p className="text-4xl font-extrabold mb-6">$0<span className="text-sm font-normal text-muted-foreground">/month</span></p>
+            <div className="space-y-3 mb-8">
               {['2 scans/month', '10 queries per scan', 'Visibility score', 'Basic diagnosis', 'Top actions'].map(f => (
-                <div key={f} className="flex items-center gap-2 text-sm">
+                <div key={f} className="flex items-center gap-2.5 text-sm">
                   <Check className="h-4 w-4 text-primary" /> {f}
                 </div>
               ))}
             </div>
             <Link to="/sign-up" className="block">
-              <button className="paper-btn-outline w-full text-xs py-3">Get Started Free</button>
+              <button className="w-full py-3 text-sm font-semibold rounded-xl border-2 border-foreground text-foreground hover:bg-foreground hover:text-background transition">
+                Get Started Free
+              </button>
             </Link>
           </div>
 
           {/* Pro */}
-          <div className="paper-card-blue p-6 relative">
-            <div className="absolute top-0 right-0 bg-foreground text-background text-xs font-mono-display font-semibold px-3 py-1 uppercase tracking-wider">
+          <div className="bg-primary rounded-2xl p-8 text-primary-foreground relative overflow-hidden">
+            <div className="absolute top-4 right-4 bg-background/20 text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">
               Popular
             </div>
-            <h3 className="font-mono-display font-bold text-lg uppercase mb-1">Pro</h3>
-            <p className="text-3xl font-extrabold font-mono-display mb-4">$29<span className="text-sm font-normal opacity-70">/month</span></p>
-            <div className="space-y-2 mb-6">
+            <h3 className="font-bold text-lg mb-1">Pro</h3>
+            <p className="text-4xl font-extrabold mb-6">$29<span className="text-sm font-normal opacity-70">/month</span></p>
+            <div className="space-y-3 mb-8">
               {['Unlimited scans', '25 queries per scan', 'Full diagnosis', 'AI action plans', 'Blog ideas & keywords', 'Progress tracking'].map(f => (
-                <div key={f} className="flex items-center gap-2 text-sm">
+                <div key={f} className="flex items-center gap-2.5 text-sm">
                   <Check className="h-4 w-4" /> {f}
                 </div>
               ))}
             </div>
-            <button className="paper-btn w-full text-xs py-3 bg-foreground text-background border-foreground opacity-70 cursor-not-allowed" disabled>
+            <button className="w-full py-3 text-sm font-semibold rounded-xl bg-background/20 text-primary-foreground opacity-70 cursor-not-allowed backdrop-blur-sm" disabled>
               Coming Soon
             </button>
           </div>
@@ -181,8 +152,8 @@ export default function Homepage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t-2 border-foreground/90 py-8">
-        <div className="container text-center font-mono-display text-xs text-muted-foreground uppercase tracking-wider">
+      <footer className="border-t border-border py-10">
+        <div className="container text-center text-sm text-muted-foreground">
           © {new Date().getFullYear()} Poolabs. All rights reserved.
         </div>
       </footer>

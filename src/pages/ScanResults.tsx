@@ -381,7 +381,19 @@ export default function ScanResults() {
 
         {activeTab === 'actions' && (
           <div className="space-y-6">
-            {Object.entries(actionGroups).map(([type, items]) => {
+            {!isPro ? (
+              <div className="paper-card p-8 text-center space-y-4">
+                <Lock className="h-10 w-10 text-muted-foreground mx-auto" />
+                <h3 className="font-mono-display font-bold text-lg uppercase">Pro Feature</h3>
+                <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                  Upgrade to Pro to unlock your full Action Plan — blog ideas, keyword targets, platform recommendations, and step-by-step actions to improve your AI visibility.
+                </p>
+                <button className="paper-btn-primary text-xs py-3 px-6 flex items-center gap-2 mx-auto">
+                  <Zap className="h-3.5 w-3.5" /> Upgrade to Pro — $29/mo
+                </button>
+              </div>
+            ) : (
+            Object.entries(actionGroups).map(([type, items]) => {
               const typeInfo = ACTION_TYPE_LABELS[type];
               const TypeIcon = typeInfo?.icon || Zap;
               return (
@@ -425,7 +437,7 @@ export default function ScanResults() {
                   </div>
                 </div>
               );
-            })}
+            }))}
           </div>
         )}
       </div>
