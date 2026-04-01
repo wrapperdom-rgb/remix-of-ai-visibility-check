@@ -11,10 +11,13 @@ import { ArrowLeft, Check, X, Copy, Share2, Lock, ChevronDown, ChevronUp, AlertT
 import { useState } from 'react';
 
 const PLATFORM_LABELS: Record<string, string> = {
-  chatgpt: 'ChatGPT',
-  perplexity: 'Perplexity',
-  claude: 'Claude',
-  gemini: 'Gemini',
+  chatgpt: 'ChatGPT', perplexity: 'Perplexity', claude: 'Claude', gemini: 'Gemini',
+  copilot: 'Copilot', meta_ai: 'Meta AI', mistral: 'Mistral', grok: 'Grok',
+  you_com: 'You.com', phind: 'Phind', poe: 'Poe', pi: 'Pi', deepseek: 'DeepSeek',
+  qwen: 'Qwen', llama: 'Llama', reka: 'Reka', command_r: 'Command R',
+  duckduckgo_ai: 'DuckDuckGo AI', brave_leo: 'Brave Leo', notion_ai: 'Notion AI',
+  slack_ai: 'Slack AI', canva_ai: 'Canva AI', jasper: 'Jasper',
+  writesonic: 'Writesonic', microsoft_designer: 'Microsoft Designer',
 };
 
 const STATUS_ICONS: Record<string, { icon: string; color: string }> = {
@@ -238,7 +241,7 @@ export default function ScanResults() {
                 <h3 className="font-mono-display font-bold text-sm uppercase tracking-wider">Platform Breakdown</h3>
               </div>
               <div className="p-4">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
                   {Object.entries(platformStats).map(([platform, stats]) => {
                     const pct = Math.round((stats.visible / stats.total) * 100);
                     return (
