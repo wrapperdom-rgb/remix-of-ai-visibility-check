@@ -18,19 +18,45 @@ export default function NewScan() {
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { data: profile } = useQuery({
+  const { data: profile, isLoading: profileLoading } = useQuery({
     queryKey: ['profile', user?.id],
     queryFn: async () => {
-      const { data, error } = await supabase.from('profiles').select('*').eq('id', user!.id).single();
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user!.id)
+        .maybeSingle();
+
       if (error) throw error;
-      return data;
+
+      if (data) return data;
+
+      const { data: createdProfile, error: createError } = await supabase
+        .from('profiles')
+        .insert({
+          id: user!.id,
+          email: user!.email ?? null,
+          full_name: user!.user_metadata?.full_name ?? null,
+        })
+        .select('*')
+        .single();
+
+      if (createError) throw createError;
+
+      return createdProfile;
     },
     enabled: !!user,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !profile) return;
+    if (!user) return;
+
+    if (!profile) {
+      toast({ title: 'Account still loading', description: 'Please wait a moment and try again.', variant: 'destructive' });
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -141,8 +167,8 @@ export default function NewScan() {
                 />
                 <p className="text-xs font-mono-display text-muted-foreground text-right">{description.length}/200</p>
               </div>
-              <button type="submit" className="paper-btn-primary w-full text-xs py-3" disabled={loading}>
-                {loading ? 'Generating...' : 'Generate Queries →'}
+              <button type="submit" className="paper-btn-primary w-full text-xs py-3" disabled={loading || profileLoading || !user}>
+                {profileLoading ? 'Loading account...' : loading ? 'Generating...' : 'Generate Queries →'}
               </button>
             </form>
           </div>
