@@ -241,7 +241,7 @@ export default function ScanResults() {
                 <h3 className="font-mono-display font-bold text-sm uppercase tracking-wider">Platform Breakdown</h3>
               </div>
               <div className="p-4">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
                   {Object.entries(platformStats).map(([platform, stats]) => {
                     const pct = Math.round((stats.visible / stats.total) * 100);
                     return (
