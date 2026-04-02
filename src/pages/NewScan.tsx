@@ -86,7 +86,16 @@ export default function NewScan() {
       if (startupError) throw startupError;
 
       const isPro = profile.plan === 'pro';
-      const queries = generateQueries(description, isPro);
+
+      // Use AI to generate relevant queries
+      const { data: aiData, error: aiError } = await supabase.functions.invoke('generate-queries', {
+        body: { startupName: name, website, description, isPro },
+      });
+      if (aiError) throw new Error(aiError.message || 'Failed to generate queries');
+      if (aiData?.error) throw new Error(aiData.error);
+      const queries: string[] = aiData.queries || [];
+      if (queries.length === 0) throw new Error('No queries generated');
+
       const { data: scan, error: scanError } = await supabase
         .from('scans')
         .insert({
