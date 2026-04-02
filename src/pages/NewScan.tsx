@@ -5,9 +5,8 @@ import { useAuth } from '@/lib/auth';
 import { useQuery } from '@tanstack/react-query';
 import { AppLayout } from '@/components/AppLayout';
 import { useToast } from '@/hooks/use-toast';
-import { generateQueries } from '@/lib/scan-utils';
-
 import { PLATFORMS } from '@/lib/scan-utils';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function NewScan() {
   const { user } = useAuth();
