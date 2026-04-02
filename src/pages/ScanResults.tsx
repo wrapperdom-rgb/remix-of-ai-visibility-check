@@ -151,7 +151,7 @@ export default function ScanResults() {
   };
 
   const shareOnX = () => {
-    const text = `My startup ${startup?.name} scored ${score}/100 on AI visibility. Find out if AI search tools mention your startup → poolabs.com`;
+    const text = `My startup ${startup?.name} scored ${score}/100 on AI visibility. Find out if AI search tools mention your startup → poolabs.in`;
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(shareUrl)}`, '_blank');
   };
 
