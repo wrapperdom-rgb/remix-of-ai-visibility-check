@@ -170,7 +170,7 @@ export default function QueryReview() {
                 onClick={() => navigate(`/scan/${scanId}/running`)}
                 disabled={uniqueQueries.length === 0}
               >
-                Run Scan ({uniqueQueries.length} queries × 4 platforms) →
+                Run Scan ({uniqueQueries.length} queries × {PLATFORMS.length} platforms) →
               </button>
             </div>
           </div>
