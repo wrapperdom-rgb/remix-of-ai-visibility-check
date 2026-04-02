@@ -159,7 +159,7 @@ export default function NewScan() {
                   value={website}
                   onChange={e => setWebsite(e.target.value)}
                   required
-                  placeholder="https://poolabs.com"
+                  placeholder="https://poolabs.in"
                   className="paper-input w-full"
                 />
               </div>
