@@ -127,8 +127,6 @@ export default function NewScan() {
     } catch (err: any) {
       const msg = err?.message || 'Something went wrong';
       toast({ title: 'Error', description: msg, variant: 'destructive' });
-    } catch (err: any) {
-      toast({ title: 'Error', description: err.message, variant: 'destructive' });
     } finally {
       setLoading(false);
     }
