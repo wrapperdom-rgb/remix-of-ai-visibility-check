@@ -5,9 +5,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/lib/auth';
 import { AppLayout } from '@/components/AppLayout';
 import { Progress } from '@/components/ui/progress';
-import { simulateVisibility, generateSuggestions, generateShareToken, extractKeywords } from '@/lib/scan-utils';
+import { generateSuggestions, generateShareToken, extractKeywords } from '@/lib/scan-utils';
 import { Check, Loader2 } from 'lucide-react';
-
 import { PLATFORMS } from '@/lib/scan-utils';
 
 export default function ScanRunning() {
@@ -17,6 +16,7 @@ export default function ScanRunning() {
   const [progress, setProgress] = useState(0);
   const [currentQuery, setCurrentQuery] = useState('');
   const [processedQueries, setProcessedQueries] = useState<string[]>([]);
+  const [errorMsg, setErrorMsg] = useState('');
   const started = useRef(false);
 
   const { data: profile } = useQuery({
@@ -80,26 +80,70 @@ export default function ScanRunning() {
         setCurrentQuery(query);
         setProgress(Math.round(((i + 1) / totalSteps) * 100));
 
-        for (const platform of PLATFORMS) {
-          const sim = simulateVisibility(startup.name, query, platform, startup.description);
+        try {
+          // Call AI to analyze visibility for this query across all platforms
+          const { data: aiData, error: aiError } = await supabase.functions.invoke('analyze-visibility', {
+            body: {
+              startupName: startup.name,
+              website: startup.website,
+              description: startup.description,
+              query,
+              platforms: [...PLATFORMS],
+            },
+          });
 
-          await supabase
-            .from('scan_results')
-            .update({
-              is_visible: sim.isVisible,
-              mention_snippet: sim.mentionSnippet,
-              competitors_found: sim.competitorsFound,
-            })
-            .eq('scan_id', scanId!)
-            .eq('query_text', query)
-            .eq('platform', platform);
+          if (aiError || aiData?.error) {
+            console.error('AI analysis error:', aiError || aiData?.error);
+            // Fallback: mark all as not visible
+            for (const platform of PLATFORMS) {
+              await supabase
+                .from('scan_results')
+                .update({
+                  is_visible: false,
+                  mention_snippet: null,
+                  competitors_found: ['Unable to analyze'],
+                })
+                .eq('scan_id', scanId!)
+                .eq('query_text', query)
+                .eq('platform', platform);
+              notVisibleCount++;
+            }
+          } else {
+            const aiResults = aiData.results || {};
 
-          if (sim.isVisible) visibleCount++;
-          else notVisibleCount++;
+            for (const platform of PLATFORMS) {
+              const platformResult = aiResults[platform];
+              const isVisible = platformResult?.is_visible || false;
+              const mentionSnippet = platformResult?.mention_snippet || null;
+              const competitorsFound = platformResult?.competitors_found || null;
+
+              await supabase
+                .from('scan_results')
+                .update({
+                  is_visible: isVisible,
+                  mention_snippet: mentionSnippet,
+                  competitors_found: competitorsFound,
+                })
+                .eq('scan_id', scanId!)
+                .eq('query_text', query)
+                .eq('platform', platform);
+
+              if (isVisible) visibleCount++;
+              else notVisibleCount++;
+            }
+          }
+        } catch (err) {
+          console.error('Error analyzing query:', query, err);
+          for (const platform of PLATFORMS) {
+            notVisibleCount++;
+          }
         }
 
         setProcessedQueries(prev => [...prev, query]);
-        await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 400));
+        // Small delay between queries to avoid rate limiting
+        if (i < uniqueQueries.length - 1) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
       }
 
       const totalResults = visibleCount + notVisibleCount;
@@ -139,7 +183,10 @@ export default function ScanRunning() {
       setTimeout(() => navigate(`/scan/${scanId}/results`), 500);
     };
 
-    runScan();
+    runScan().catch(err => {
+      console.error('Scan failed:', err);
+      setErrorMsg(err.message || 'Scan failed');
+    });
   }, [scan, results, profile, scanId, navigate]);
 
   return (
@@ -149,12 +196,17 @@ export default function ScanRunning() {
           <div className="h-16 w-16 mx-auto flex items-center justify-center bg-primary text-primary-foreground border-2 border-foreground/90 rounded-sm animate-pulse">
             <Loader2 className="h-8 w-8 animate-spin" />
           </div>
-          <h2 className="text-xl font-extrabold font-mono-display uppercase">Scanning AI Platforms...</h2>
+          <h2 className="text-xl font-extrabold font-mono-display uppercase">Analyzing AI Platforms...</h2>
+          <p className="text-xs text-muted-foreground">Using AI to check {PLATFORMS.length} platforms for each query</p>
           <Progress value={progress} className="h-2" />
           <p className="text-xs font-mono-display text-muted-foreground uppercase tracking-wider">{progress}% complete</p>
 
           {currentQuery && (
             <p className="text-sm font-medium truncate px-4 font-mono-display">Checking: "{currentQuery}"</p>
+          )}
+
+          {errorMsg && (
+            <p className="text-sm text-destructive">{errorMsg}</p>
           )}
 
           <div className="max-h-48 overflow-y-auto space-y-1 text-left px-4">

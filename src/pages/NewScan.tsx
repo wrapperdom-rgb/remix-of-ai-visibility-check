@@ -5,8 +5,6 @@ import { useAuth } from '@/lib/auth';
 import { useQuery } from '@tanstack/react-query';
 import { AppLayout } from '@/components/AppLayout';
 import { useToast } from '@/hooks/use-toast';
-import { generateQueries } from '@/lib/scan-utils';
-
 import { PLATFORMS } from '@/lib/scan-utils';
 
 export default function NewScan() {
@@ -87,7 +85,16 @@ export default function NewScan() {
       if (startupError) throw startupError;
 
       const isPro = profile.plan === 'pro';
-      const queries = generateQueries(description, isPro);
+
+      // Use AI to generate relevant queries
+      const { data: aiData, error: aiError } = await supabase.functions.invoke('generate-queries', {
+        body: { startupName: name, website, description, isPro },
+      });
+      if (aiError) throw new Error(aiError.message || 'Failed to generate queries');
+      if (aiData?.error) throw new Error(aiData.error);
+      const queries: string[] = aiData.queries || [];
+      if (queries.length === 0) throw new Error('No queries generated');
+
       const { data: scan, error: scanError } = await supabase
         .from('scans')
         .insert({
@@ -117,7 +124,8 @@ export default function NewScan() {
 
       navigate(`/scan/${scan.id}/queries`);
     } catch (err: any) {
-      toast({ title: 'Error', description: err.message, variant: 'destructive' });
+      const msg = err?.message || 'Something went wrong';
+      toast({ title: 'Error', description: msg, variant: 'destructive' });
     } finally {
       setLoading(false);
     }
@@ -151,7 +159,7 @@ export default function NewScan() {
                   value={website}
                   onChange={e => setWebsite(e.target.value)}
                   required
-                  placeholder="https://poolabs.com"
+                  placeholder="https://poolabs.in"
                   className="paper-input w-full"
                 />
               </div>
