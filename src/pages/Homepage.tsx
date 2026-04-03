@@ -130,7 +130,7 @@ export default function Homepage() {
               Popular
             </div>
             <h3 className="font-bold text-lg mb-1">Pro</h3>
-            <p className="text-4xl font-extrabold mb-6">$29<span className="text-sm font-normal opacity-70">/month</span></p>
+            <p className="text-4xl font-extrabold mb-6">$10<span className="text-sm font-normal opacity-70">/month</span></p>
             <div className="space-y-3 mb-8">
               {['Unlimited scans', '25 queries per scan', 'Full diagnosis', 'AI action plans', 'Blog ideas & keywords', 'Progress tracking'].map(f => (
                 <div key={f} className="flex items-center gap-2.5 text-sm">
@@ -138,9 +138,11 @@ export default function Homepage() {
                 </div>
               ))}
             </div>
-            <button className="paper-btn w-full text-xs py-3 bg-foreground text-background border-foreground opacity-70 cursor-not-allowed" disabled>
-              Coming Soon
-            </button>
+            <Link to={user ? '/settings' : '/sign-up'}>
+              <button className="paper-btn w-full text-xs py-3 bg-foreground text-background border-foreground hover:opacity-90 transition">
+                Upgrade to Pro
+              </button>
+            </Link>
           </div>
         </div>
       </section>
