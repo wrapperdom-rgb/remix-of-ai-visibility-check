@@ -147,6 +147,16 @@ export default function Homepage() {
         </div>
       </section>
 
+      {/* Contact */}
+      <section className="container py-20 max-w-2xl mx-auto text-center">
+        <h2 className="text-3xl md:text-4xl font-extrabold mb-4 tracking-tight">Need Help?</h2>
+        <p className="text-muted-foreground mb-6">Have questions or need support? Reach out to us.</p>
+        <a href="mailto:wrapperdom@gmail.com" className="paper-btn-primary text-xs py-3 px-8 inline-flex items-center gap-2">
+          Contact Support
+        </a>
+        <p className="text-xs text-muted-foreground mt-4">wrapperdom@gmail.com</p>
+      </section>
+
       {/* Footer */}
       <footer className="border-t-2 border-foreground/15 py-10">
         <div className="container text-center text-sm text-muted-foreground">
