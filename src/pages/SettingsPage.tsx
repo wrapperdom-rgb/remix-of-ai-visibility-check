@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/lib/auth';
 import { AppLayout } from '@/components/AppLayout';
 import { useToast } from '@/hooks/use-toast';
-import { Check, Crown } from 'lucide-react';
+import { Check, Crown, Loader2 } from 'lucide-react';
 
 export default function SettingsPage() {
   const { user, signOut } = useAuth();
@@ -14,6 +14,15 @@ export default function SettingsPage() {
   const queryClient = useQueryClient();
   const [fullName, setFullName] = useState('');
   const [saving, setSaving] = useState(false);
+  const [upgrading, setUpgrading] = useState(false);
+  const [searchParams] = useSearchParams();
+
+  // Show success toast if returning from checkout
+  const paymentStatus = searchParams.get('status');
+  if (paymentStatus === 'succeeded' || paymentStatus === 'completed') {
+    // Invalidate profile to refresh plan status
+    queryClient.invalidateQueries({ queryKey: ['profile'] });
+  }
 
   const { data: profile } = useQuery({
     queryKey: ['profile', user?.id],
@@ -36,6 +45,27 @@ export default function SettingsPage() {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
     }
     setSaving(false);
+  };
+
+  const handleUpgrade = async () => {
+    setUpgrading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        body: { return_url: window.location.origin + '/settings?status=succeeded' },
+      });
+
+      if (error) throw error;
+
+      if (data?.checkout_url) {
+        window.location.href = data.checkout_url;
+      } else {
+        throw new Error('No checkout URL returned');
+      }
+    } catch (err: any) {
+      console.error('Checkout error:', err);
+      toast({ title: 'Error', description: err.message || 'Failed to start checkout', variant: 'destructive' });
+      setUpgrading(false);
+    }
   };
 
   const handleSignOut = async () => {
@@ -75,11 +105,19 @@ export default function SettingsPage() {
             <span className="paper-badge text-[10px] py-0.5 px-2">{profile?.plan === 'pro' ? 'Pro' : 'Free'}</span>
           </div>
           <div className="p-5">
-            {profile?.plan !== 'pro' && (
+            {profile?.plan === 'pro' ? (
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-primary">
+                  <Crown className="h-5 w-5" />
+                  <span className="font-mono-display font-bold uppercase text-sm">You're on Pro!</span>
+                </div>
+                <p className="text-sm text-muted-foreground">Unlimited scans, 25 queries per scan, full diagnosis & actions.</p>
+              </div>
+            ) : (
               <div className="border-2 border-primary rounded-sm p-4 space-y-3">
                 <div className="flex items-center gap-2">
                   <Crown className="h-5 w-5 text-primary" />
-                  <span className="font-mono-display font-bold uppercase text-sm">Upgrade to Pro — $29/mo</span>
+                  <span className="font-mono-display font-bold uppercase text-sm">Upgrade to Pro — $10/mo</span>
                 </div>
                 {['Unlimited scans', '25 queries per scan', 'Full diagnosis & actions', 'Progress tracking', 'Shareable reports'].map(f => (
                   <div key={f} className="flex items-center gap-2 text-sm">
@@ -87,10 +125,18 @@ export default function SettingsPage() {
                   </div>
                 ))}
                 <button
-                  className="paper-btn-primary w-full text-xs py-3"
-                  onClick={() => toast({ title: 'Coming Soon', description: 'Payment integration is coming soon.' })}
+                  className="paper-btn-primary w-full text-xs py-3 flex items-center justify-center gap-2"
+                  onClick={handleUpgrade}
+                  disabled={upgrading}
                 >
-                  Upgrade
+                  {upgrading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Redirecting to checkout...
+                    </>
+                  ) : (
+                    'Upgrade Now'
+                  )}
                 </button>
               </div>
             )}
