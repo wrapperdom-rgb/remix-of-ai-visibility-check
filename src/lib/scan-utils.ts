@@ -230,16 +230,28 @@ export interface ActionItem {
   isProOnly: boolean;
 }
 
+export interface ActionStep {
+  step: string;
+  detail: string;
+}
+
+export interface ActionItemEnhanced extends ActionItem {
+  steps?: ActionStep[];
+  example?: string;
+  expectedOutcome?: string;
+  timeEstimate?: string;
+}
+
 export function generateActions(
   visibilityScore: number,
   competitorNames: string[],
   category: string,
   startupName: string,
   isPro: boolean
-): ActionItem[] {
+): ActionItemEnhanced[] {
   const topComp = competitorNames[0] || 'competitors';
-  const actions: ActionItem[] = [];
-
+  const secondComp = competitorNames[1] || 'alternatives';
+  const actions: ActionItemEnhanced[] = [];
   // Blog post ideas
   actions.push({
     type: 'blog_idea',
