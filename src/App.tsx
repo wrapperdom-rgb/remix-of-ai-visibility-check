@@ -14,6 +14,11 @@ import ScanRunning from "./pages/ScanRunning";
 import ScanResults from "./pages/ScanResults";
 import PublicReport from "./pages/PublicReport";
 import SettingsPage from "./pages/SettingsPage";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import ContactUs from "./pages/ContactUs";
+import AboutUs from "./pages/AboutUs";
+import CookiesPolicy from "./pages/CookiesPolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +35,11 @@ const App = () => (
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/report/:shareToken" element={<PublicReport />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsAndConditions />} />
+            <Route path="/contact" element={<ContactUs />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/cookies" element={<CookiesPolicy />} />
             <Route path="/dashboard" element={<AuthGuard><Dashboard /></AuthGuard>} />
             <Route path="/scan/new" element={<AuthGuard><NewScan /></AuthGuard>} />
             <Route path="/scan/:scanId/queries" element={<AuthGuard><QueryReview /></AuthGuard>} />
