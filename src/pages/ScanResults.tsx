@@ -6,7 +6,7 @@ import { AppLayout } from '@/components/AppLayout';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { getScoreLabel, getScoreBadgeClass, generateDiagnosis, generateActions, getImprovementPotential, extractKeywords } from '@/lib/scan-utils';
+import { getScoreLabel, getScoreBadgeClass, generateDiagnosis, generateActions, getImprovementPotential, extractKeywords, type ActionItemEnhanced } from '@/lib/scan-utils';
 import { ArrowLeft, Check, X, Copy, Share2, Lock, ChevronDown, ChevronUp, AlertTriangle, TrendingUp, FileText, Target, Zap, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 
