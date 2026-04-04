@@ -6,7 +6,7 @@ import { AppLayout } from '@/components/AppLayout';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { getScoreLabel, getScoreBadgeClass, generateDiagnosis, generateActions, getImprovementPotential, extractKeywords } from '@/lib/scan-utils';
+import { getScoreLabel, getScoreBadgeClass, generateDiagnosis, generateActions, getImprovementPotential, extractKeywords, type ActionItemEnhanced } from '@/lib/scan-utils';
 import { ArrowLeft, Check, X, Copy, Share2, Lock, ChevronDown, ChevronUp, AlertTriangle, TrendingUp, FileText, Target, Zap, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 
@@ -406,7 +406,7 @@ export default function ScanResults() {
                     <h3 className="font-mono-display font-bold text-sm uppercase tracking-wider">{typeInfo?.label || type}</h3>
                   </div>
                   <div className="space-y-2">
-                    {items.map((action, i) => (
+                    {items.map((action: ActionItemEnhanced, i: number) => (
                       <div key={i} className="paper-card p-4">
                         <div className="flex items-start gap-3">
                           <div className={`flex h-5 w-5 items-center justify-center rounded-sm shrink-0 mt-0.5 ${
@@ -429,8 +429,31 @@ export default function ScanResults() {
                               </>
                             ) : (
                               <>
-                                <p className="font-semibold text-sm mb-1">{action.title}</p>
+                                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                  <p className="font-semibold text-sm">{action.title}</p>
+                                  {action.timeEstimate && (
+                                    <span className="text-[10px] font-mono-display px-1.5 py-0.5 rounded-sm bg-muted text-muted-foreground">⏱ {action.timeEstimate}</span>
+                                  )}
+                                </div>
                                 <p className="text-xs text-muted-foreground leading-relaxed">{action.description}</p>
+                                {action.steps && action.steps.length > 0 && (
+                                  <div className="mt-3 space-y-2 border-l-2 border-primary/30 pl-3">
+                                    {action.steps.map((s, si) => (
+                                      <div key={si}>
+                                        <p className="text-xs font-semibold">{si + 1}. {s.step}</p>
+                                        <p className="text-[11px] text-muted-foreground leading-relaxed">{s.detail}</p>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                                {action.example && (
+                                  <div className="mt-2 text-[11px] bg-secondary/50 rounded-sm px-2.5 py-1.5 border border-foreground/5">
+                                    <span className="font-semibold">Example:</span> {action.example}
+                                  </div>
+                                )}
+                                {action.expectedOutcome && (
+                                  <p className="mt-2 text-[11px] text-primary font-medium">📈 Expected: {action.expectedOutcome}</p>
+                                )}
                               </>
                             )}
                           </div>

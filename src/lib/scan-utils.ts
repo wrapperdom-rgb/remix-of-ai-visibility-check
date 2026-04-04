@@ -230,158 +230,264 @@ export interface ActionItem {
   isProOnly: boolean;
 }
 
+export interface ActionStep {
+  step: string;
+  detail: string;
+}
+
+export interface ActionItemEnhanced extends ActionItem {
+  steps?: ActionStep[];
+  example?: string;
+  expectedOutcome?: string;
+  timeEstimate?: string;
+}
+
 export function generateActions(
   visibilityScore: number,
   competitorNames: string[],
   category: string,
   startupName: string,
   isPro: boolean
-): ActionItem[] {
+): ActionItemEnhanced[] {
   const topComp = competitorNames[0] || 'competitors';
-  const actions: ActionItem[] = [];
-
-  // Blog post ideas
+  const secondComp = competitorNames[1] || 'alternatives';
+  const actions: ActionItemEnhanced[] = [];
   actions.push({
     type: 'blog_idea',
     title: `${startupName} vs ${topComp}: An Honest Comparison`,
-    description: `Write a detailed, fair comparison highlighting differences. AI models love structured comparisons.`,
+    description: `Write a 1500+ word comparison post with structured format AI models can parse.`,
     priority: 'high',
     isProOnly: false,
+    steps: [
+      { step: 'Create a comparison table', detail: `Features side-by-side: ${startupName} vs ${topComp}. Include pricing, key features, pros/cons.` },
+      { step: 'Add "Who is it for?" section', detail: `Explain when to choose each. Honesty builds trust with AI models.` },
+      { step: 'Publish on blog + Medium', detail: 'Cross-post for maximum reach. AI models index both.' },
+    ],
+    example: `"${startupName} vs ${topComp} in 2025: Which ${category} Tool Is Right for You?"`,
+    expectedOutcome: '+5-10 visibility points within 2-4 weeks.',
+    timeEstimate: '3-4 hours',
   });
 
   actions.push({
     type: 'blog_idea',
     title: `The Complete Guide to ${category} in 2025`,
-    description: `Create the definitive resource for ${category}. Include your product naturally as one of the options.`,
+    description: `Create 3000+ word definitive resource with your product included naturally.`,
     priority: 'high',
     isProOnly: false,
+    steps: [
+      { step: 'Outline 8-10 sections', detail: `What is ${category}, why it matters, top tools, how to evaluate, mistakes, trends.` },
+      { step: `Include ${startupName} in "Top Tools"`, detail: 'Position honestly with 2-3 unique differentiators.' },
+      { step: 'Add FAQ section', detail: `Answer "What is the best free ${category} tool?" — matches AI patterns.` },
+    ],
+    expectedOutcome: '+8-15 visibility points over 4-6 weeks.',
+    timeEstimate: '5-6 hours',
   });
 
   actions.push({
     type: 'blog_idea',
-    title: `Why We Built ${startupName}: Solving ${category} Problems`,
-    description: 'Origin story posts get indexed by AI and create strong brand association with problem domains.',
+    title: `Why We Built ${startupName}: The ${category} Problem`,
+    description: 'Origin stories build brand-problem association in AI training data.',
     priority: 'medium',
     isProOnly: false,
+    steps: [
+      { step: 'Tell a specific problem story', detail: 'Describe the exact frustration. Be concrete.' },
+      { step: 'Show before/after', detail: 'Demonstrate transformation with specific numbers.' },
+    ],
+    expectedOutcome: 'AI associates your brand with the problem space.',
+    timeEstimate: '2-3 hours',
   });
 
   actions.push({
     type: 'blog_idea',
     title: `Top 10 ${category} Tools for Small Teams`,
-    description: 'List-style posts are frequently cited by AI. Include your product with honest positioning.',
+    description: 'List posts are #1 format AI cites for recommendation queries.',
     priority: 'medium',
     isProOnly: true,
+    steps: [
+      { step: 'List 10 tools including yours', detail: `Position ${startupName} at #3-5. Include ${topComp}.` },
+      { step: 'Add comparison table', detail: 'Feature matrix — AI extracts structured data from tables.' },
+    ],
+    expectedOutcome: 'Directly answers "best X tools?" queries.',
+    timeEstimate: '3-4 hours',
   });
 
   actions.push({
     type: 'blog_idea',
     title: `How to Choose the Right ${category} Platform`,
-    description: 'Decision-framework posts match how users query AI tools. Great for capturing "which should I use" queries.',
+    description: 'Decision-framework posts match AI query patterns perfectly.',
     priority: 'medium',
     isProOnly: true,
+    steps: [
+      { step: 'Create decision flowchart', detail: '"If you need X → choose Y."' },
+      { step: 'Score tools on 5 criteria', detail: `Include ${startupName} with honest scores.` },
+    ],
+    expectedOutcome: 'Captures "which X should I use?" queries.',
+    timeEstimate: '2-3 hours',
   });
 
-  // Keywords to target
   actions.push({
     type: 'keyword',
     title: `best ${category} tool`,
-    description: 'High-volume query pattern used across all AI platforms. Optimize your homepage and content for this.',
+    description: 'High-volume query asked thousands of times daily across AI platforms.',
     priority: 'high',
     isProOnly: false,
-  });
-
-  actions.push({
-    type: 'keyword',
-    title: `${startupName} alternative`,
-    description: 'Own your alternative page before competitors do. Create a "Why choose us" page.',
-    priority: 'high',
-    isProOnly: false,
+    steps: [
+      { step: 'Add to homepage H1/H2', detail: `"${startupName} — The best ${category} tool for [niche]"` },
+      { step: 'Create dedicated landing page', detail: `yoursite.com/best-${category.replace(/\s+/g, '-').toLowerCase()}-tool` },
+    ],
+    expectedOutcome: 'Appears for "What\'s the best X tool?" queries.',
+    timeEstimate: '1 hour',
   });
 
   actions.push({
     type: 'keyword',
     title: `${topComp} alternative`,
-    description: `Capture users looking for alternatives to ${topComp}. Write comparison content.`,
+    description: `Capture high-intent users looking for ${topComp} alternatives.`,
     priority: 'high',
     isProOnly: false,
+    steps: [
+      { step: 'Write comparison page', detail: `"${startupName} vs ${topComp}: Why Teams Are Switching"` },
+      { step: 'List 3 advantages', detail: '"50% cheaper", "Built-in X feature".' },
+      { step: 'Include migration guide', detail: `"Switch from ${topComp} in 15 minutes"` },
+    ],
+    expectedOutcome: `Captures "${topComp} alternative" queries.`,
+    timeEstimate: '2-3 hours',
   });
 
   actions.push({
     type: 'keyword',
     title: `free ${category} for startups`,
-    description: 'Startup-focused queries are common in AI tools. Highlight your free tier or startup pricing.',
+    description: 'Startup-focused queries are extremely common in AI tools.',
     priority: 'medium',
     isProOnly: true,
+    steps: [
+      { step: 'Highlight free tier prominently', detail: '"Free for startups" above the fold.' },
+      { step: 'Create startup landing page', detail: `"${startupName} for Startups — Free ${category}"` },
+    ],
+    expectedOutcome: 'Appears in "free X for startups" queries.',
+    timeEstimate: '1-2 hours',
   });
 
-  // Platforms to publish on
   actions.push({
     type: 'platform',
     title: 'Product Hunt',
-    description: 'Launch or update your Product Hunt listing. AI models heavily reference Product Hunt data.',
+    description: 'AI models heavily reference Product Hunt. Essential listing.',
     priority: 'high',
     isProOnly: false,
+    steps: [
+      { step: 'Create listing', detail: 'producthunt.com/posts/new — tagline, 3+ screenshots.' },
+      { step: 'Plan launch', detail: 'Post 12:01 AM PT. Reply to every comment.' },
+      { step: 'Get 5+ upvotes', detail: 'Ask colleagues for genuine upvotes.' },
+    ],
+    expectedOutcome: 'PH listed in 60%+ of "best tool" AI queries.',
+    timeEstimate: '4-5 hours prep',
   });
 
   actions.push({
     type: 'platform',
     title: 'G2 & Capterra',
-    description: 'Get reviews on B2B software directories. These are primary data sources for AI recommendations.',
+    description: 'Primary data sources for AI software recommendations.',
     priority: 'high',
     isProOnly: false,
+    steps: [
+      { step: 'Claim G2 profile', detail: 'sell.g2.com — complete every field.' },
+      { step: 'Get 5 reviews', detail: 'Email happy customers for G2 reviews.' },
+      { step: 'Claim Capterra', detail: 'capterra.com/vendors — same process.' },
+    ],
+    expectedOutcome: 'Referenced in 70%+ of AI "best software" queries.',
+    timeEstimate: '2 hours + 1 week for reviews',
   });
 
   actions.push({
     type: 'platform',
     title: 'Dev.to / Medium / Hashnode',
-    description: 'Publish technical content and thought leadership. Cross-posting increases your content footprint.',
+    description: 'Cross-posting multiplies your AI data footprint.',
     priority: 'medium',
     isProOnly: true,
+    steps: [
+      { step: 'Create accounts on all 3', detail: 'Company name, logo, bio with site link.' },
+      { step: 'Cross-post content', detail: 'Use canonical URL to avoid SEO penalties.' },
+    ],
+    expectedOutcome: 'Each platform = separate data source for AI.',
+    timeEstimate: '1 hour setup + 30 min/week',
   });
 
   actions.push({
     type: 'platform',
     title: 'Reddit & Hacker News',
-    description: 'Engage authentically in relevant communities. AI models index these heavily.',
+    description: 'AI models index Reddit/HN heavily.',
     priority: 'medium',
     isProOnly: true,
+    steps: [
+      { step: 'Find subreddits', detail: `Search "${category}" — join 3-5 relevant subs.` },
+      { step: 'Answer helpfully', detail: `Mention ${startupName} only when relevant.` },
+      { step: 'Post "Show HN"', detail: `"Show HN: ${startupName} — [pitch]"` },
+    ],
+    expectedOutcome: 'Reddit/HN mentions cited in 40%+ of AI recommendations.',
+    timeEstimate: '30 min/day ongoing',
   });
 
-  // Simple actionable steps
   actions.push({
     type: 'step',
-    title: 'Add Schema.org markup to your website',
-    description: 'Add Organization, Product, and FAQ structured data. Takes 30 minutes and helps AI understand your product.',
+    title: 'Add Schema.org markup',
+    description: 'Structured data helps AI understand and categorize your product.',
     priority: 'high',
     isProOnly: false,
+    steps: [
+      { step: 'Add Organization schema', detail: `JSON-LD: {"@type": "Organization", "name": "${startupName}"}` },
+      { step: 'Add Product schema', detail: 'Include name, description, price, category.' },
+      { step: 'Validate', detail: 'search.google.com/test/rich-results' },
+    ],
+    expectedOutcome: 'Effect in 2-4 weeks after indexing.',
+    timeEstimate: '30-60 minutes',
   });
 
   actions.push({
     type: 'step',
-    title: 'Create a public FAQ page',
-    description: `Answer the top 10 questions about ${category}. Match the exact phrasing people use when asking AI.`,
+    title: 'Create AI-optimized FAQ page',
+    description: `Answer questions using exact phrasing people use in AI queries about ${category}.`,
     priority: 'high',
     isProOnly: false,
+    steps: [
+      { step: 'Write 10+ questions', detail: `"What is the best ${category} tool?", "Is ${startupName} free?"` },
+      { step: 'Answer in 2-3 sentences', detail: 'Direct answer first, then detail.' },
+      { step: 'Add FAQ schema', detail: 'FAQPage JSON-LD for direct AI parsing.' },
+    ],
+    example: `Q: "What is ${startupName}?" A: "${startupName} is a ${category} tool that helps [audience] [benefit]."`,
+    expectedOutcome: 'FAQ cited in 30%+ of AI answers about your category.',
+    timeEstimate: '1-2 hours',
   });
 
   actions.push({
     type: 'step',
-    title: 'Build an "alternatives" landing page',
-    description: `Create a page titled "${startupName} vs [Competitor]" for each major competitor. Be honest and factual.`,
+    title: 'Build competitor comparison pages',
+    description: 'Dedicated pages for each major competitor.',
     priority: 'medium',
     isProOnly: false,
+    steps: [
+      { step: 'Create comparison page', detail: `yoursite.com/${startupName.toLowerCase()}-vs-${topComp.toLowerCase().replace(/\s+/g, '-')}` },
+      { step: 'Be genuinely fair', detail: 'Acknowledge competitor strengths.' },
+      { step: 'Repeat for top 3', detail: `Pages for ${competitorNames.slice(0, 3).join(', ') || 'top competitors'}.` },
+    ],
+    expectedOutcome: 'Captures "[product] vs [competitor]" queries.',
+    timeEstimate: '2 hours per page',
   });
 
   actions.push({
     type: 'step',
     title: 'Set up a public changelog',
-    description: 'A public changelog signals an active product. AI models consider recency when recommending tools.',
+    description: 'Active products get recommended more by AI.',
     priority: 'low',
     isProOnly: true,
+    steps: [
+      { step: 'Create /changelog page', detail: '"March 2025 — Added X, Improved Y."' },
+      { step: 'Update weekly', detail: 'Consistency > size.' },
+    ],
+    expectedOutcome: 'AI factors recency into recommendations.',
+    timeEstimate: '30 min setup + 15 min/week',
   });
 
   if (!isPro) {
-    // Ensure some items are pro-only for free users
     let proCount = actions.filter(a => a.isProOnly).length;
     if (proCount < 6) {
       let toMark = 6 - proCount;
@@ -399,6 +505,8 @@ export function generateActions(
 
   return actions;
 }
+
+
 
 export function generateSuggestions(
   visibilityScore: number,
