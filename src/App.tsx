@@ -19,6 +19,7 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import ContactUs from "./pages/ContactUs";
 import AboutUs from "./pages/AboutUs";
 import CookiesPolicy from "./pages/CookiesPolicy";
+import OAuthCallback from "./pages/OAuthCallback";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="/scan/:scanId/running" element={<AuthGuard><ScanRunning /></AuthGuard>} />
             <Route path="/scan/:scanId/results" element={<AuthGuard><ScanResults /></AuthGuard>} />
             <Route path="/settings" element={<AuthGuard><SettingsPage /></AuthGuard>} />
+            <Route path="/~oauth" element={<OAuthCallback />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
