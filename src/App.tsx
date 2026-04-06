@@ -19,6 +19,7 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import ContactUs from "./pages/ContactUs";
 import AboutUs from "./pages/AboutUs";
 import CookiesPolicy from "./pages/CookiesPolicy";
+import OAuthCallback from "./pages/OAuthCallback";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
