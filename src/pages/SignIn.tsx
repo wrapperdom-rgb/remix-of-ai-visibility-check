@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { lovable } from '@/integrations/lovable/index';
+import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Zap } from 'lucide-react';
 
@@ -12,20 +12,15 @@ export default function SignIn() {
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
       });
-
-      if (result.error) {
-        toast({ title: 'Error', description: String(result.error), variant: 'destructive' });
-        return;
+      if (error) {
+        toast({ title: 'Error', description: error.message, variant: 'destructive' });
       }
-
-      if (result.redirected) {
-        return;
-      }
-
-      navigate('/dashboard');
     } catch (err: any) {
       toast({ title: 'Error', description: err.message, variant: 'destructive' });
     } finally {

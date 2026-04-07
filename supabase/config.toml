@@ -1,1 +1,5 @@
 project_id = "xngqhvwijabzpfmpedlt"
+
+[auth]
+site_url = "https://poolabs.in"
+additional_redirect_urls = ["https://poolabs.in", "https://poolabs.in/**", "https://www.poolabs.in", "https://www.poolabs.in/**", "https://visibility-check-bot.lovable.app", "https://visibility-check-bot.lovable.app/**"]
