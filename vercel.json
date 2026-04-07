@@ -1,6 +1,3 @@
 {
-  "rewrites": [
-    { "source": "/~oauth/:path*", "destination": "https://visibility-check-bot.lovable.app/~oauth/:path*" },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
